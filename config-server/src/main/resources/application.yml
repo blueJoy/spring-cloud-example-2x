@@ -1,12 +1,45 @@
 server:
   port: 8888
 
+#访问规则
+#/{appication}/{profile}/[{label}]
+#　/{application}-{profile}.yml
+#　/{application}-{profile}.properties
+#　/{label}/{application}-{profile}.properties　/{label}/{application}-{profile}.yml它们都可以映射到对应的配置文件{application}-{profile}.properties其中{label}为具体的分支，默认为master；6、配置中心的安全认证现在配置内容通过加解密的方式实现了安全保障，但是配置中心spring-cloud-config-server还是完全对外公开的。如果通过http协议地址：http://config-server-ip:port/applicationName/profile/label是可以获取到配置文件内容，这对配置信息的安全保护还是不足。需要给spring-cloud-config-server提供用户安全认证，在这里使用spring-boot提供的security组件来使用HTTP Bastic用户安全认证。在spring-cloud-config-server中增加新的依赖security：在spring-cloud-config-server全局配置文件中增加用户信息：这样就为spring-cloud-config-server提供了用户安全认证。在客户的bootstrap配置文件中增加下述内容，来实现spring-cloud-config-client访问7、配置中心加密配置文件统一存储在GIT中，虽然增强了管理和版本控制，但是文件内容的安全性也成了问题。如果外部任意知道了GIT地址或spring-cloud-config-server的地址，那么配置文件的全部内容相当于对外完全开放。这个时候就需要提供配置内容加解密逻辑。将加密后的配置内容保存在GIT仓库中，在spring-cloud-config-client访问spring-cloud-config-server的时候，过spring-cloud-config-server实现加密数据的解密，这样就可以保证配置内容的安全了。a、对称加密配置密钥查看加解密环境对dev-5.0.0加密在命令行执行curl http://127.0.0.1:9000/encrypt -u test -d dev-5.0.0 Enter host password for user 'test':dcd8d3714c6e8fe91660b73461352a7807b6938e48e9d17773e6f8714cad718d(base)-d指加密数据-u是用户名将密文配置到git文件中去密文前面要加上{cipher}访问该配置得到明文b、非对称加密使用不同的密钥（key）实现配置数据的加密和解密。使用公钥加密数据，使用私钥解密数据。
 
 spring:
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/blueJoy/spring-cloud-example-2x/config-repo
+          uri: https://github.com/blueJoy/config-repo
+          # 忽略SSL认证
           #skip-ssl-validation: true
           timeout: 4 # 超时默认秒
+          # 默认是读取根目录，这样配置可以根据项目名称，读取不同的配置
+          search-paths: '{application}'
+          # 更多认证加密方式查看文档： https://www.springcloud.cc/spring-cloud-greenwich.html#_git_backend
+  rabbitmq:
+    addresses: 10.1.204.33
+    username: guest
+    password: guest
+    virtual-host: BXZ
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+#    statusPageUrlPath: /admin/info
+#    healthCheckUrlPath: /admin/health
+#management:
+#  server:
+#    servlet:
+#      context-path: /admin
+
+
+---
+spring:
+  profiles: cloud
