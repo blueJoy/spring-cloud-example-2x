@@ -7,4 +7,6 @@ spring:
     config:
       server:
         git:
-          uri:
+          uri: https://github.com/blueJoy/spring-cloud-example-2x/config-repo
+          #skip-ssl-validation: true
+          timeout: 4 # 超时默认秒
