@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URL:http://localhost:8888/}
+      profile: dev
+      label: master
+      # 快速失败
+#      fail-fast: true
+      # 设置重试，需要添加spring-retry和spring-boot-starter-aop的依赖
+#      retry:
+#        max-attempts: 6
+      # 设置超时
+#      request-read-timeout: 10
+#      request-connect-timeout: 10
+
+#配置中心健康检测
+#health:
+#  config:
+#    enabled: true
+

@@ -1,0 +1,15 @@
+# 关闭eureka配置
+eureka:
+  client:
+    enabled: false
+spring:
+  cloud:
+    zookeeper:
+      connect-string: 10.1.204.33:2181
+      discovery:
+        enabled: true
+        register: true
+    config:
+      enabled: false
+server:
+  port: 8881

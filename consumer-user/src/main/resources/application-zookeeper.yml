@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    zookeeper:
+      connect-string: 10.1.204.33:2181
+      discovery:
+        enabled: true
+        register: true
+    config:
+      enabled: false
+
+
+eureka:
+  client:
+    enabled: false
+
+server:
+  port: 8882
