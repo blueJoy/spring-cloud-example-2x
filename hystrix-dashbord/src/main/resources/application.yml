@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: dev
+
+---
+spring:
+  profiles: dev
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+applications: consumer-user
+turbine:
+  aggregator:
+    clusterConfig: ${applications}
+  appConfig: ${applications}

@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: test-user
+        uri: http://localhost:8882
+        predicates:
+        - Path=/consumer/*
+      - id: consumer-user-route
+        uri: lb://consumer-user
+        predicates:
+        - Path=/consumer-user/**
+      - id: method_route
+        uri: http://localhost:8882
+        predicates:
+          - Method=POST
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

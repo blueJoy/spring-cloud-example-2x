@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: hystrix-dashbord
+
+server:
+  port: 9001
